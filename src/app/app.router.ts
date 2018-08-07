@@ -2,13 +2,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './componentes/home/home.component';
 import { BuscarComponent } from './componentes/buscar/buscar.component';
-import { PeliculasComponent } from './componentes/peliculas/peliculas.component';
+import { PeliculaComponent } from './componentes/pelicula/pelicula.component';
 
 
 const APP_ROUTES: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'buscar', component: BuscarComponent },
-    { path: 'peliculas', component: PeliculasComponent },
+    { path: 'buscar/:texto', component: BuscarComponent },
+    { path: 'pelicula/:id/:pag', component: PeliculaComponent },
+    { path: 'pelicula/:id/:pag/:busqueda', component: PeliculaComponent },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ]
 

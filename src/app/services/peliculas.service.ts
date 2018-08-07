@@ -7,8 +7,9 @@ import { map } from 'rxjs/operators';; // Map
 export class PeliculasService {
 
   private apikey:string = "939e7bee49034124ab1168722593c6b3";
-  private urlMoviedb:string = "https://api.themoviedb.org/3"
+  private urlMoviedb:string = "https://api.themoviedb.org/3";
 
+  public peliculas: any[] = [];
 
   constructor(
     private jsonp:Jsonp
@@ -28,12 +29,36 @@ export class PeliculasService {
     let url = `${this.urlMoviedb}/discover/movie?primary_release_date.gte=${ desdeStr }&primary_release_date.lte=${ hastaStr }&api_key=${this.apikey}&language=es&callback=JSONP_CALLBACK`
 
     return this.jsonp.get( url )
-                .pipe(map(res => res.json()));
+                .pipe(map(res => res.json().results));
 
   }
 
   getPopulares(){
     let url = `${this.urlMoviedb}/discover/movie?sort_by=popularity.desc&api_key=${this.apikey}&language=es&callback=JSONP_CALLBACK`
+
+    return this.jsonp.get( url )
+                .pipe(map(res => res.json().results));
+  }
+
+  getPopularesNinos(){
+    let url = `${this.urlMoviedb}/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc&api_key=${this.apikey}&language=es&callback=JSONP_CALLBACK`
+
+    return this.jsonp.get( url )
+                .pipe(map(res => res.json().results));
+  }
+
+  buscarPelicula(texto:string){
+    let url = `${this.urlMoviedb}/search/movie?query=${ texto }&sort_by=popularity.desc&api_key=${this.apikey}&language=es&callback=JSONP_CALLBACK`
+
+    return this.jsonp.get( url )
+                .pipe(map(res => {
+                  this.peliculas = res.json().results;
+                  return res.json().results;
+                }));
+  }
+
+  getPelicula( pelicula: string){
+    let url = `${this.urlMoviedb}/movie/${pelicula}?api_key=${this.apikey}&language=es&callback=JSONP_CALLBACK`
 
     return this.jsonp.get( url )
                 .pipe(map(res => res.json()));
